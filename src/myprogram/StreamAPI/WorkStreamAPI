@@ -1,0 +1,48 @@
+package myprogram.StreamAPI;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+public class WorkStreamAPI {
+    List<Integer> Three;
+    List<Integer> Five;
+    List<Integer> ThreeAndFive;
+    IntStream intStream;
+    List<Object> list;
+
+    public void StreamNumber(int limit) {
+        Three = new ArrayList<>();
+        Five = new ArrayList<>();
+        ThreeAndFive = new ArrayList<>();
+        intStream = IntStream.rangeClosed(1, limit);
+
+/* Можно создать обычный IntStream и сделать вывод через forEach,
+ но из-за по элементного перебора метода forEach теряем во время вывода в консоль в 2.5 раза больше времени,
+ но экономим место в куче.
+ */
+        list = intStream.sorted().mapToObj(temp -> {
+                    if (temp % 15 == 0) {
+                        Three.add(temp);
+                        ThreeAndFive.add(temp);
+                        Five.add(temp);
+                        return " кратно 3 и 5 ";
+                    } else if (temp % 3 == 0) {
+                        Three.add(temp);
+                        return " кратно 3 ";
+                    } else if (temp % 5 == 0) {
+                        Five.add(temp);
+                        return " кратно 5 ";
+                    }
+                    return temp;
+                })
+                .collect(Collectors.toList());
+
+        System.out.println(list);
+        System.out.println("\n\n" + Three);
+        System.out.println("\n" + Five);
+        System.out.println("\n" + ThreeAndFive);
+    }
+}
